@@ -2,9 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 
-/* ============================================
-   TYPES & CONSTANTS
-   ============================================ */
+// Types & Constants
 
 interface Star {
   id: number
@@ -36,9 +34,7 @@ function getMonthKey(): string {
   return `nn_${d.getFullYear()}_${d.getMonth() + 1}`
 }
 
-/* ============================================
-   MAIN COMPONENT
-   ============================================ */
+// Main Component
 
 export default function Home() {
   // --- State ---
@@ -236,9 +232,7 @@ export default function Home() {
     )
   }
 
-  /* ============================================
-     RENDER
-     ============================================ */
+  // Render
 
   return (
     <main className="relative min-h-dvh">
@@ -447,4 +441,94 @@ export default function Home() {
                 {showUpgrade && (
                   <div className="mt-4 p-6 glass-card-elevated text-center animate-fade-in-up">
                     <p className="text-night-bright text-base mb-2">
-                      You&apos;ve used all {​​​​​​​​​​​​​​​​
+                      You&apos;ve used all {FREE_LIMIT} free reflections this month
+                    </p>
+                    <p className="text-night-subtle text-sm mb-5">
+                      Upgrade to Premium for unlimited reflections, voice input,
+                      pattern insights, and more.
+                    </p>
+                    <button className="px-6 py-3 rounded-xl bg-night-accent/20 text-night-accent border border-night-accent/30 text-sm font-medium hover:bg-night-accent/30 transition-gentle">
+                      Upgrade — £4.99/month
+                    </button>
+                    <p className="text-xs text-night-muted mt-3">
+                      Resets on the 1st of each month
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* --- LOADING SHIMMER --- */}
+            {isSubmitting && !reflection && (
+              <div className="mt-6 space-y-4 animate-fade-in">
+                <div className="glass-card p-6">
+                  <div className="shimmer-line w-3/4 mb-4" />
+                  <div className="shimmer-line w-full mb-3" />
+                  <div className="shimmer-line w-full mb-3" />
+                  <div className="shimmer-line w-5/6 mb-3" />
+                  <div className="shimmer-line w-2/3" />
+                </div>
+              </div>
+            )}
+
+            {/* --- REFLECTION DISPLAY --- */}
+            {reflection && (
+              <div ref={reflectionRef} className="animate-fade-in-up space-y-5 mt-4">
+                {/* Dream recap */}
+                <div className="glass-card p-5">
+                  <p className="text-xs text-night-muted uppercase tracking-widest mb-2">
+                    Your dream
+                  </p>
+                  <p className="text-night-text text-sm leading-relaxed line-clamp-4">
+                    {dream}
+                  </p>
+                  {mood && (
+                    <span className="inline-block mt-3 text-xs px-3 py-1 rounded-full bg-night-accent/8 text-night-accent border border-night-accent/15">
+                      {MOODS.find((m) => m.value === mood)?.icon}{' '}
+                      {MOODS.find((m) => m.value === mood)?.label}
+                    </span>
+                  )}
+                </div>
+
+                {/* Reflection */}
+                <div className="glass-card-elevated p-6 sm:p-8">
+                  <p className="text-xs text-night-accent/70 uppercase tracking-widest mb-4">
+                    Reflection
+                  </p>
+                  <div className="reflection-text text-night-bright/90 text-base leading-relaxed">
+                    {reflection.split('\n\n').map((paragraph, i) => (
+                      <p key={i}>{paragraph}</p>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Disclaimer */}
+                <p className="text-xs text-night-muted text-center leading-relaxed px-4">
+                  This is a gentle reflection, not professional advice.
+                  For mental health support, please speak with a qualified professional.
+                </p>
+
+                {/* Actions */}
+                <div className="flex gap-3 pt-2">
+                  <button
+                    onClick={handleNewDream}
+                    className="flex-1 py-3.5 px-5 rounded-xl text-sm font-medium bg-night-accent/15 text-night-accent border border-night-accent/25 hover:bg-night-accent/25 transition-gentle active:scale-[0.98]"
+                  >
+                    New Dream
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Footer */}
+        <footer className="w-full px-6 py-6 text-center">
+          <p className="text-xs text-night-muted/60">
+            Night Notes — Understand your dreams. Gently.
+          </p>
+        </footer>
+      </div>
+    </main>
+  )
+}
