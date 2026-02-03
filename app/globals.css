@@ -2,12 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ============================================
-   NIGHT NOTES — GLOBAL STYLES
-   Premium dark wellness aesthetic
-   ============================================ */
-
-/* Base layer */
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -25,7 +19,6 @@
     color: #ede8f5;
   }
 
-  /* Scrollbar */
   ::-webkit-scrollbar {
     width: 6px;
   }
@@ -41,9 +34,6 @@
   }
 }
 
-/* ============================================
-   GLASS CARDS
-   ============================================ */
 @layer components {
   .glass-card {
     background: rgba(17, 22, 49, 0.6);
@@ -78,9 +68,6 @@
   }
 }
 
-/* ============================================
-   AMBIENT BACKGROUND
-   ============================================ */
 .ambient-bg {
   position: fixed;
   inset: 0;
@@ -93,9 +80,6 @@
   pointer-events: none;
 }
 
-/* ============================================
-   STAR FIELD
-   ============================================ */
 .star {
   position: absolute;
   border-radius: 50%;
@@ -103,9 +87,6 @@
   pointer-events: none;
 }
 
-/* ============================================
-   TEXTAREA OVERRIDES
-   ============================================ */
 textarea::placeholder {
   color: rgba(139, 131, 160, 0.5);
 }
@@ -114,9 +95,10 @@ textarea {
   resize: none;
 }
 
-/* ============================================
-   MOOD PILLS
-   ============================================ */
+input::placeholder {
+  color: rgba(139, 131, 160, 0.5);
+}
+
 .mood-pill {
   padding: 8px 16px;
   border-radius: 100px;
@@ -144,9 +126,6 @@ textarea {
   background: rgba(184, 164, 212, 0.12);
 }
 
-/* ============================================
-   VOICE RECORDING PULSE
-   ============================================ */
 @keyframes recording-ring {
   0% {
     transform: scale(1);
@@ -162,9 +141,6 @@ textarea {
   animation: recording-ring 1.5s infinite ease-out;
 }
 
-/* ============================================
-   SHIMMER LOADING
-   ============================================ */
 .shimmer-line {
   height: 14px;
   border-radius: 7px;
@@ -178,9 +154,6 @@ textarea {
   animation: shimmer 2s infinite linear;
 }
 
-/* ============================================
-   REFLECTION TEXT
-   ============================================ */
 .reflection-text p {
   margin-bottom: 1rem;
   line-height: 1.75;
@@ -190,9 +163,20 @@ textarea {
   margin-bottom: 0;
 }
 
-/* ============================================
-   UTILITY TRANSITIONS
-   ============================================ */
 .transition-gentle {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-4 {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
