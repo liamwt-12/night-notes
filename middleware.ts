@@ -1,45 +1,15 @@
-import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
-  let response = NextResponse.next({ request: { headers: request.headers } })
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return request.cookies.get(name)?.value
-        },
-        set(name: string, value: string, options: CookieOptions) {
-          request.cookies.set({ name, value, ...options })
-          response = NextResponse.next({ request: { headers: request.headers } })
-          response.cookies.set({ name, value, ...options })
-        },
-        remove(name: string, options: CookieOptions) {
-          request.cookies.set({ name, value: '', ...options })
-          response = NextResponse.next({ request: { headers: request.headers } })
-          response.cookies.set({ name, value: '', ...options })
-        },
-      },
-    }
-  )
-
-  const { data: { user } } = await supabase.auth.getUser()
-
+  // Only protect the old app routes - landing page always shows
   const protectedPaths = ['/app', '/ritual', '/insights', '/settings', '/morning', '/complete']
   const isProtectedPath = protectedPaths.some(path => request.nextUrl.pathname.startsWith(path))
 
-  if (isProtectedPath && !user) {
+  if (isProtectedPath) {
     return NextResponse.redirect(new URL('/', request.url))
   }
 
-  if (request.nextUrl.pathname === '/' && user) {
-    return NextResponse.redirect(new URL('/app', request.url))
-  }
-
-  return response
+  return NextResponse.next()
 }
 
 export const config = {
