@@ -8,5 +8,5 @@
 [build.environment]
   NODE_VERSION = "18"
 
-[functions]
+[functions."*"]
   timeout = 30
