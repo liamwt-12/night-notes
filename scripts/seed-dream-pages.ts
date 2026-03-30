@@ -1,17 +1,12 @@
 /**
- * Seed script: pre-generates dream symbol pages.
+ * Seed script: pre-generates dream symbol pages directly via Supabase + Anthropic.
  *
  * Usage:
- *   npx tsx scripts/seed-dream-pages.ts
- *
- * Requires these env vars:
- *   SUPABASE_URL (or NEXT_PUBLIC_SUPABASE_URL)
- *   SUPABASE_SERVICE_KEY
- *   ANTHROPIC_API_KEY
- *
- * Or set SITE_URL to call the generation API endpoint instead:
- *   SITE_URL=https://trynightnotes.com npx tsx scripts/seed-dream-pages.ts
+ *   NEXT_PUBLIC_SUPABASE_URL=... SUPABASE_SERVICE_KEY=... ANTHROPIC_API_KEY=... npx tsx scripts/seed-dream-pages.ts
  */
+
+import Anthropic from '@anthropic-ai/sdk'
+import { createClient } from '@supabase/supabase-js'
 
 const SYMBOLS = [
   // Original 49
@@ -75,73 +70,40 @@ const SYMBOLS = [
   'feeling-free', 'feeling-trapped', 'feeling-powerful', 'feeling-small',
 ]
 
-// Deduplicate (drowning appears twice in the spec)
 const uniqueSymbols = Array.from(new Set(SYMBOLS))
 
 function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-async function seedViaAPI(siteUrl: string) {
-  console.log(`Seeding via API at ${siteUrl}`)
-  console.log(`${uniqueSymbols.length} symbols to generate\n`)
-
-  for (let i = 0; i < uniqueSymbols.length; i++) {
-    const symbol = uniqueSymbols[i]
-    console.log(`[${i + 1}/${uniqueSymbols.length}] Generating: ${symbol}`)
-
-    try {
-      const res = await fetch(`${siteUrl}/api/generate-dream-page`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ symbol }),
-      })
-
-      if (res.ok) {
-        const data = await res.json()
-        console.log(`  ✓ ${data.meta_title || 'saved'}`)
-      } else {
-        const err = await res.text()
-        console.log(`  ✗ ${res.status}: ${err}`)
-      }
-    } catch (error) {
-      console.log(`  ✗ Error: ${error}`)
-    }
-
-    // 2s delay between requests to avoid rate limits
-    if (i < uniqueSymbols.length - 1) {
-      await sleep(2000)
-    }
-  }
-
-  console.log('\nDone!')
+function slugify(s: string): string {
+  return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
 }
 
-async function seedDirect() {
-  // Dynamic imports for direct mode
-  const { default: Anthropic } = await import('@anthropic-ai/sdk')
-  const { createClient } = await import('@supabase/supabase-js')
-
-  const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL
+async function seed() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   const supabaseKey = process.env.SUPABASE_SERVICE_KEY
   const anthropicKey = process.env.ANTHROPIC_API_KEY
 
   if (!supabaseUrl || !supabaseKey || !anthropicKey) {
-    console.error('Missing required env vars: SUPABASE_URL, SUPABASE_SERVICE_KEY, ANTHROPIC_API_KEY')
+    console.error('Missing required env vars: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_KEY, ANTHROPIC_API_KEY')
     process.exit(1)
   }
 
   const supabase = createClient(supabaseUrl, supabaseKey)
   const anthropic = new Anthropic({ apiKey: anthropicKey })
 
-  console.log(`Seeding directly (${uniqueSymbols.length} symbols)\n`)
+  let generated = 0
+  let skipped = 0
+
+  console.log(`Seeding ${uniqueSymbols.length} dream symbols\n`)
 
   for (let i = 0; i < uniqueSymbols.length; i++) {
     const symbol = uniqueSymbols[i]
-    const slug = symbol.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+    const slug = slugify(symbol)
     const displaySymbol = symbol.replace(/-/g, ' ')
 
-    // Check if already exists
+    // Skip if already exists
     const { data: existing } = await supabase
       .from('dream_pages')
       .select('slug')
@@ -150,6 +112,7 @@ async function seedDirect() {
 
     if (existing) {
       console.log(`[${i + 1}/${uniqueSymbols.length}] ${symbol} — already exists, skipping`)
+      skipped++
       continue
     }
 
@@ -214,6 +177,7 @@ Return ONLY valid JSON with exactly these fields:
         console.log(`  ✗ DB error: ${error.message}`)
       } else {
         console.log(`  ✓ ${content.meta_title}`)
+        generated++
       }
     } catch (error) {
       console.log(`  ✗ Error: ${error}`)
@@ -225,13 +189,7 @@ Return ONLY valid JSON with exactly these fields:
     }
   }
 
-  console.log('\nDone!')
+  console.log(`\nDone! Generated: ${generated}, Skipped: ${skipped}`)
 }
 
-// Main
-const siteUrl = process.env.SITE_URL
-if (siteUrl) {
-  seedViaAPI(siteUrl)
-} else {
-  seedDirect()
-}
+seed()
