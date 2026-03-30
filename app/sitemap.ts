@@ -14,7 +14,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const dreamPages: MetadataRoute.Sitemap = (pages || []).map((page) => ({
     url: `https://trynightnotes.com/dream-meaning/${page.slug}`,
-    lastModified: page.updated_at || new Date().toISOString(),
+    lastModified: new Date(page.updated_at || '2026-03-30').toISOString(),
     changeFrequency: 'monthly' as const,
     priority: 0.8,
   }))
