@@ -5,6 +5,9 @@
  *   NEXT_PUBLIC_SUPABASE_URL=... SUPABASE_SERVICE_KEY=... ANTHROPIC_API_KEY=... npx tsx scripts/seed-dream-pages.ts
  */
 
+import dotenv from 'dotenv'
+dotenv.config({ path: '.env.local' })
+
 import Anthropic from '@anthropic-ai/sdk'
 import { createClient } from '@supabase/supabase-js'
 
