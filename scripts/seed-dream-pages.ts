@@ -14,6 +14,7 @@
  */
 
 const SYMBOLS = [
+  // Original 49
   'teeth', 'falling', 'being-chased', 'water', 'snakes',
   'flying', 'houses', 'exes', 'death', 'pregnancy',
   'spiders', 'dogs', 'cars', 'running', 'school',
@@ -24,6 +25,54 @@ const SYMBOLS = [
   'crying', 'cheating', 'wolf', 'bridge', 'elevator',
   'tornado', 'darkness', 'childhood-home', 'being-watched', 'paralysis',
   'teeth-falling-out', 'earthquake', 'being-lost', 'missing-flight',
+
+  // Animals
+  'lion', 'bear', 'horse', 'rabbit', 'fish',
+  'shark', 'eagle', 'owl', 'butterfly', 'bee',
+  'rat', 'mouse', 'frog', 'turtle', 'elephant',
+  'tiger', 'deer', 'fox', 'pig', 'chicken',
+  'cow', 'goat', 'whale', 'dolphin', 'penguin',
+  'crocodile', 'gorilla', 'bat', 'scorpion', 'jellyfish',
+
+  // People
+  'mother', 'father', 'sister', 'brother', 'grandmother',
+  'grandfather', 'boss', 'teacher', 'stranger', 'celebrity',
+  'dead-person', 'old-friend', 'child', 'baby-girl', 'baby-boy',
+  'twin', 'soldier', 'doctor', 'priest', 'witch',
+
+  // Places
+  'beach', 'mountain', 'cave', 'desert', 'jungle',
+  'city', 'village', 'church', 'school-classroom', 'office',
+  'prison', 'castle', 'mansion', 'apartment', 'garden',
+  'park', 'library', 'hospital-room', 'airport', 'subway',
+  'spaceship',
+
+  // Situations
+  'exam', 'interview', 'wedding-day', 'funeral', 'party',
+  'being-attacked', 'saving-someone', 'being-saved', 'winning', 'losing',
+  'being-fired', 'getting-married', 'divorce', 'giving-birth', 'dying',
+  'flying-a-plane', 'driving-car', 'swimming', 'climbing', 'falling-into-water',
+
+  // Objects
+  'key', 'door', 'window', 'clock', 'book',
+  'letter', 'gift', 'knife', 'gun', 'ring',
+  'crown', 'treasure', 'map', 'compass', 'ladder',
+  'rope', 'candle', 'ice', 'gold', 'silver',
+  'diamond', 'broken-glass', 'locked-box', 'empty-room', 'old-photograph',
+
+  // Body
+  'hair-falling-out', 'pregnant-belly', 'broken-leg', 'blind', 'deaf',
+  'flying-body', 'invisible', 'shrinking', 'growing', 'losing-voice',
+  'running-but-slow', 'hands', 'eyes', 'mouth',
+
+  // Nature
+  'rain', 'snow', 'flood', 'storm', 'rainbow',
+  'sunset', 'full-moon', 'eclipse', 'earthquake-ground', 'volcanic-eruption',
+  'thunder', 'lightning', 'fog', 'wind', 'drought',
+
+  // Emotions
+  'being-judged', 'being-ignored', 'being-loved', 'feeling-proud', 'feeling-ashamed',
+  'feeling-free', 'feeling-trapped', 'feeling-powerful', 'feeling-small',
 ]
 
 // Deduplicate (drowning appears twice in the spec)
