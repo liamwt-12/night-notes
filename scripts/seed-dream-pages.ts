@@ -1,15 +1,9 @@
 /**
- * Seed script: pre-generates dream symbol pages directly via Supabase + Anthropic.
+ * Seed script: pre-generates dream symbol pages via the API endpoint.
  *
  * Usage:
- *   NEXT_PUBLIC_SUPABASE_URL=... SUPABASE_SERVICE_KEY=... ANTHROPIC_API_KEY=... npx tsx scripts/seed-dream-pages.ts
+ *   SITE_URL=https://trynightnotes.com npx tsx scripts/seed-dream-pages.ts
  */
-
-import dotenv from 'dotenv'
-dotenv.config({ path: '.env.local' })
-
-import Anthropic from '@anthropic-ai/sdk'
-import { createClient } from '@supabase/supabase-js'
 
 const SYMBOLS = [
   // Original 49
@@ -79,120 +73,82 @@ function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-function slugify(s: string): string {
-  return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+const MAX_RETRIES = 3
+const RETRY_DELAY = 3000
+
+async function generateWithRetry(siteUrl: string, symbol: string): Promise<{ ok: boolean; title?: string; error?: string }> {
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      const res = await fetch(`${siteUrl}/api/generate-dream-page`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ symbol }),
+      })
+
+      if (res.status === 504) {
+        console.log(`  ⏱ Timeout (attempt ${attempt}/${MAX_RETRIES})`)
+        if (attempt < MAX_RETRIES) {
+          await sleep(RETRY_DELAY)
+          continue
+        }
+        return { ok: false, error: '504 Gateway Timeout after 3 retries' }
+      }
+
+      if (res.ok) {
+        const data = await res.json()
+        return { ok: true, title: data.meta_title || 'saved' }
+      }
+
+      const err = await res.text()
+      return { ok: false, error: `${res.status}: ${err}` }
+    } catch (error) {
+      console.log(`  ⏱ Request error (attempt ${attempt}/${MAX_RETRIES}): ${error}`)
+      if (attempt < MAX_RETRIES) {
+        await sleep(RETRY_DELAY)
+        continue
+      }
+      return { ok: false, error: `${error}` }
+    }
+  }
+
+  return { ok: false, error: 'Max retries exceeded' }
 }
 
 async function seed() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supabaseKey = process.env.SUPABASE_SERVICE_KEY
-  const anthropicKey = process.env.ANTHROPIC_API_KEY
+  const siteUrl = process.env.SITE_URL
 
-  if (!supabaseUrl || !supabaseKey || !anthropicKey) {
-    console.error('Missing required env vars: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_KEY, ANTHROPIC_API_KEY')
+  if (!siteUrl) {
+    console.error('Missing required env var: SITE_URL')
+    console.error('Usage: SITE_URL=https://trynightnotes.com npx tsx scripts/seed-dream-pages.ts')
     process.exit(1)
   }
 
-  const supabase = createClient(supabaseUrl, supabaseKey)
-  const anthropic = new Anthropic({ apiKey: anthropicKey })
-
   let generated = 0
-  let skipped = 0
+  let failed = 0
 
-  console.log(`Seeding ${uniqueSymbols.length} dream symbols\n`)
+  console.log(`Seeding ${uniqueSymbols.length} symbols via ${siteUrl}\n`)
 
   for (let i = 0; i < uniqueSymbols.length; i++) {
     const symbol = uniqueSymbols[i]
-    const slug = slugify(symbol)
-    const displaySymbol = symbol.replace(/-/g, ' ')
+    console.log(`[${i + 1}/${uniqueSymbols.length}] ${symbol}`)
 
-    // Skip if already exists
-    const { data: existing } = await supabase
-      .from('dream_pages')
-      .select('slug')
-      .eq('slug', slug)
-      .single()
+    const result = await generateWithRetry(siteUrl, symbol)
 
-    if (existing) {
-      console.log(`[${i + 1}/${uniqueSymbols.length}] ${symbol} — already exists, skipping`)
-      skipped++
-      continue
+    if (result.ok) {
+      console.log(`  ✓ ${result.title}`)
+      generated++
+    } else {
+      console.log(`  ✗ ${result.error}`)
+      failed++
     }
 
-    console.log(`[${i + 1}/${uniqueSymbols.length}] Generating: ${symbol}`)
-
-    try {
-      const message = await anthropic.messages.create({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 2000,
-        system: 'You are a dream psychology expert writing for a general audience. You write with warmth, intelligence and genuine insight. Never be generic.',
-        messages: [{
-          role: 'user',
-          content: `Generate a comprehensive dream interpretation page for the symbol: ${displaySymbol}
-
-Return ONLY valid JSON with exactly these fields:
-{
-  "meta_title": "Dreaming About ${displaySymbol}: Meaning & Interpretation | Night Notes",
-  "meta_desc": "150 character description for Google",
-  "intro": "2-3 sentence opening that creates immediate resonance. Make it feel personal.",
-  "psychological_meaning": "400 words. Jungian and psychological perspective. Warm, specific, not generic.",
-  "what_researchers_say": "250 words. What sleep researchers and psychologists actually say. Cite real concepts.",
-  "common_variations": "200 words. Different versions of this dream and what each means.",
-  "what_to_do": "150 words. Practical reflection questions and next steps.",
-  "related_symbols": ["symbol1", "symbol2", "symbol3", "symbol4", "symbol5"],
-  "faqs": [
-    {"q": "question people actually search for", "a": "clear answer"},
-    {"q": "question", "a": "answer"},
-    {"q": "question", "a": "answer"},
-    {"q": "question", "a": "answer"},
-    {"q": "question", "a": "answer"}
-  ]
-}`
-        }]
-      })
-
-      const text = message.content[0].type === 'text' ? message.content[0].text : ''
-      const jsonMatch = text.match(/\{[\s\S]*\}/)
-      if (!jsonMatch) {
-        console.log(`  ✗ Failed to parse response`)
-        continue
-      }
-
-      const content = JSON.parse(jsonMatch[0])
-
-      const { error } = await supabase.from('dream_pages').insert({
-        slug,
-        symbol: displaySymbol,
-        type: 'symbol',
-        meta_title: content.meta_title,
-        meta_desc: content.meta_desc,
-        intro: content.intro,
-        psychological_meaning: content.psychological_meaning,
-        what_researchers_say: content.what_researchers_say,
-        common_variations: content.common_variations,
-        what_to_do: content.what_to_do,
-        related_symbols: content.related_symbols,
-        faqs: content.faqs,
-        view_count: 0,
-      })
-
-      if (error) {
-        console.log(`  ✗ DB error: ${error.message}`)
-      } else {
-        console.log(`  ✓ ${content.meta_title}`)
-        generated++
-      }
-    } catch (error) {
-      console.log(`  ✗ Error: ${error}`)
-    }
-
-    // 2s delay between requests
+    // 3s delay between symbols
     if (i < uniqueSymbols.length - 1) {
-      await sleep(2000)
+      await sleep(3000)
     }
   }
 
-  console.log(`\nDone! Generated: ${generated}, Skipped: ${skipped}`)
+  console.log(`\nDone! Generated/cached: ${generated}, Failed: ${failed}`)
 }
 
 seed()
