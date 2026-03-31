@@ -65,6 +65,81 @@ const SYMBOLS = [
   // Emotions
   'being-judged', 'being-ignored', 'being-loved', 'feeling-proud', 'feeling-ashamed',
   'feeling-free', 'feeling-trapped', 'feeling-powerful', 'feeling-small',
+
+  // Scenarios
+  'being-invisible', 'time-travel', 'end-of-world', 'apocalypse',
+  'being-famous', 'winning-lottery', 'being-royalty', 'superpowers',
+  'teleporting', 'cloning', 'being-a-child-again', 'being-old',
+  'being-opposite-gender', 'being-an-animal', 'living-underwater',
+  'living-in-space', 'being-in-a-movie', 'being-in-a-video-game',
+  'being-in-a-book', 'being-in-a-painting',
+
+  // Relationships
+  'ex-getting-married', 'falling-in-love-with-stranger',
+  'being-cheated-on', 'cheating-on-partner', 'unrequited-love',
+  'long-distance-relationship', 'toxic-relationship',
+  'first-love', 'forbidden-love', 'soulmate', 'arranged-marriage',
+  'divorce-dream', 'reconciliation', 'rejection', 'jealousy',
+  'betrayal-by-friend', 'losing-a-friend', 'making-new-friends',
+  'childhood-friend', 'meeting-celebrity',
+
+  // Work and career
+  'being-promoted', 'being-fired-dream', 'starting-a-business',
+  'failing-an-exam', 'passing-an-exam', 'public-speaking',
+  'being-late-for-work', 'forgetting-password', 'job-interview',
+  'winning-award', 'being-famous-at-work', 'coworker-conflict',
+  'working-with-ex', 'dream-job', 'retirement', 'redundancy',
+  'being-the-boss', 'making-a-mistake-at-work',
+  'discovering-talent', 'creative-breakthrough',
+
+  // Spiritual
+  'god', 'devil', 'angel', 'heaven', 'hell', 'reincarnation',
+  'past-life', 'spirit-guide', 'meditation', 'enlightenment',
+  'prayer', 'church-dream', 'religious-ceremony', 'baptism',
+  'confession', 'miracle', 'prophecy', 'karma', 'afterlife',
+  'speaking-to-dead',
+
+  // Nature and cosmos
+  'northern-lights', 'solar-eclipse', 'meteor-shower',
+  'black-hole', 'parallel-universe', 'alternate-reality',
+  'time-loop', 'deja-vu-dream', 'precognition', 'psychic-powers',
+  'levitation', 'astral-projection', 'lucid-dreaming',
+  'sleep-paralysis-creature', 'shadow-figure', 'light-being',
+  'energy-healing', 'chakras', 'aura', 'third-eye',
+
+  // Modern life
+  'losing-phone', 'phone-battery-dying', 'social-media',
+  'going-viral', 'being-cancelled', 'online-dating',
+  'video-call', 'working-from-home', 'artificial-intelligence',
+  'robot', 'self-driving-car', 'cryptocurrency', 'stock-market',
+  'identity-theft', 'being-hacked', 'surveillance-cameras',
+  'smart-home', 'virtual-reality', 'drone', 'electric-car',
+
+  // Food and drink
+  'eating-rotten-food', 'endless-food', 'cooking-dream',
+  'restaurant-dream', 'food-poisoning', 'starving', 'feasting',
+  'drinking-alcohol', 'being-drunk', 'coffee-dream',
+  'chocolate-dream', 'wedding-cake', 'birthday-cake',
+  'cooking-for-someone', 'being-cooked-for', 'exotic-food',
+  'food-fight', 'food-shortage', 'baking', 'eating-alone',
+
+  // Home and spaces
+  'moving-house', 'empty-house', 'haunted-house',
+  'finding-new-rooms', 'locked-room', 'secret-passage',
+  'basement-dream', 'attic-dream', 'roof-dream',
+  'house-on-fire', 'flooding-house', 'broken-house',
+  'dream-home', 'childhood-bedroom', 'parents-house',
+  'living-with-strangers', 'home-invasion', 'renovation',
+  'building-a-house', 'house-collapsing',
+
+  // Body and health
+  'surgery-dream', 'being-ill', 'recovering-from-illness',
+  'losing-weight', 'gaining-weight', 'changing-appearance',
+  'tattoo-dream', 'piercing-dream', 'ageing-rapidly',
+  'youth-restored', 'perfect-health', 'chronic-pain',
+  'disability-dream', 'healing-powers', 'giving-blood',
+  'organ-transplant', 'plastic-surgery', 'broken-bones',
+  'hospital-stay', 'near-death-experience',
 ]
 
 const uniqueSymbols = Array.from(new Set(SYMBOLS))
