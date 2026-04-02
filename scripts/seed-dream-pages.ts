@@ -140,6 +140,87 @@ const SYMBOLS = [
   'disability-dream', 'healing-powers', 'giving-blood',
   'organ-transplant', 'plastic-surgery', 'broken-bones',
   'hospital-stay', 'near-death-experience',
+
+  // Colours and elements
+  'red-dream', 'blue-dream', 'green-dream', 'yellow-dream',
+  'black-dream', 'white-dream', 'gold-dream', 'silver-dream',
+  'purple-dream', 'orange-dream', 'pink-dream', 'grey-dream',
+
+  // Numbers and patterns
+  'number-3', 'number-7', 'number-11', 'repeating-numbers',
+  'infinity-symbol', 'spiral', 'maze', 'labyrinth', 'grid-pattern',
+  'geometric-shapes', 'sacred-geometry', 'mandala',
+
+  // Weather and sky
+  'hurricane', 'blizzard', 'heatwave', 'drought-dream',
+  'double-rainbow', 'blood-moon', 'blue-moon', 'shooting-star',
+  'comet', 'aurora-borealis', 'sunset-dream', 'sunrise-dream',
+  'storm-at-sea', 'calm-after-storm', 'fog-dream', 'hail',
+
+  // Vehicles and travel
+  'motorcycle', 'bicycle', 'boat', 'sailing', 'cruise-ship',
+  'submarine', 'hot-air-balloon', 'helicopter', 'rocket-ship',
+  'spaceship-dream', 'parachute', 'surfing', 'skateboarding',
+  'horse-riding', 'rowing-boat', 'taxi', 'bus-dream', 'ferry',
+
+  // Music and art
+  'playing-guitar', 'singing-dream', 'dancing-dream',
+  'painting-dream', 'writing-dream', 'performing-on-stage',
+  'winning-competition', 'losing-competition', 'audience-dream',
+  'applause', 'booing', 'forgotten-lines', 'wrong-notes',
+  'art-gallery', 'museum-dream', 'theatre-dream',
+
+  // Conflict and resolution
+  'being-attacked', 'defending-yourself', 'protecting-someone',
+  'being-rescued', 'rescuing-someone', 'negotiating',
+  'surrendering', 'winning-battle', 'losing-battle',
+  'making-peace', 'forgiving-someone', 'being-forgiven',
+  'standing-up-for-yourself', 'backing-down', 'confrontation',
+
+  // Technology and future
+  'computer-dream', 'coding-dream', 'internet-dream',
+  'losing-signal', 'power-outage', 'broken-technology',
+  'future-world', 'flying-cars', 'teleportation-dream',
+  'mind-reading', 'time-machine', 'invisibility-cloak',
+  'magic-wand', 'superpowers-dream', 'transformation',
+
+  // Ancient and historical
+  'ancient-egypt', 'ancient-rome', 'medieval-castle',
+  'viking-dream', 'samurai-dream', 'native-american-dream',
+  'aztec-dream', 'greek-gods', 'norse-mythology',
+  'fairy-tale-dream', 'being-in-history', 'past-era',
+  'museum-artifact', 'archaeological-dig', 'ancient-temple',
+
+  // Relationships extended
+  'meeting-your-idol', 'interviewing-someone',
+  'being-interviewed', 'teaching-someone', 'being-taught',
+  'mentoring', 'being-mentored', 'collaborative-dream',
+  'competitive-dream', 'peer-pressure', 'standing-out',
+  'fitting-in', 'being-misunderstood', 'being-understood',
+  'deep-conversation', 'silence-dream',
+
+  // Personal growth
+  'finding-purpose', 'losing-direction', 'crossroads-dream',
+  'making-big-decision', 'regretting-decision',
+  'second-chances', 'fresh-start', 'letting-go',
+  'holding-on', 'moving-forward', 'going-back',
+  'self-discovery', 'identity-crisis', 'transformation-dream',
+  'becoming-stronger', 'overcoming-fear',
+
+  // Dreams about dreaming
+  'knowing-youre-dreaming', 'trying-to-wake-up',
+  'dream-within-dream', 'false-awakening', 'sleep-paralysis',
+  'recurring-dream', 'prophetic-dream', 'shared-dream',
+  'controlling-dream', 'losing-control-of-dream',
+  'forgetting-dream', 'remembering-dream',
+
+  // Animals extended
+  'peacock', 'flamingo', 'parrot', 'hummingbird', 'swan',
+  'raven', 'crow', 'vulture', 'hawk', 'falcon',
+  'polar-bear', 'panda', 'koala', 'kangaroo', 'giraffe',
+  'zebra', 'rhinoceros', 'hippopotamus', 'cheetah', 'leopard',
+  'octopus', 'squid', 'seahorse', 'starfish', 'crab',
+  'lobster', 'ant', 'dragonfly', 'ladybird', 'praying-mantis',
 ]
 
 const uniqueSymbols = Array.from(new Set(SYMBOLS))
